@@ -11,86 +11,87 @@ import java.util.Scanner;
 
 public class Main {
 
+    // HashMap to store games (keys) and ids (values) with
+    public static Map<String, String[]> gamesAndIdsInit = new HashMap<>();
+
     public static void main(String[] args) {
-        // HashMap to store games (keys) and ids (values) with
-        Map<String, String> gamesAndIds = new HashMap<>();
-        
-        File[] steamGameFiles = findSteamGameFiles();
-        Map<String, String> gameList = collectSteamGames(steamGameFiles, gamesAndIds);
-        startGame(gameList);
+
+        menu();
+        //File[] steamGameFiles = findSteamGameFiles();
+        //Map<String, String> gameList = collectSteamGames(steamGameFiles, gamesAndIds);
+        //startGame(gameList);
     }
 
-    private static File[] findSteamGameFiles() {
-        // Create file root to list game folders from Steam
-        String steamRoot = "C:\\Program Files (x86)\\Steam\\steamapps";
+    public static void menu() {
+        // Menu to list available choices.
+        System.out.println("1. Start game");
+        System.out.println("2. Add games");
+        System.out.println("0. Exit");
+        int choice = menuList(); // Get user choice and control that the input is allowed.
+        userChooses(choice); // Start the corresponding action from the input integer.
 
-        // Find the .acf files with app id from the folder specified above
-        File steamRootFile = new File(steamRoot);
-        File[] steamFolder = steamRootFile.listFiles(new FilenameFilter() {
-            public boolean accept(File steamRoot, String fileName) {
-                return fileName.endsWith(".acf");
-            }
-        });
-        return steamFolder;
-    }
-    private static Map<String, String> collectSteamGames(File[] steamFolder, Map gamesAndIds) {
-        // Find the app id and game name in each file
-        for (File file : steamFolder) {
-            //System.out.println("File: " + file.toString());
-
-            // Start to scan file and add needed line to array
-            try {
-                Scanner scannerFile = new Scanner(file);
-                int counter = 0;
-                ArrayList<String> linesInFile = new ArrayList<>();
-                while (scannerFile.hasNextLine() && counter < 5) { // Only the first 5 lines are needed
-                    String lineContent = scannerFile.nextLine();
-                    linesInFile.add(lineContent);
-                    //System.out.println("Line: " + lineContent);
-                    counter++;
-                }
-                String appIdLine = linesInFile.get(2); // App id on line 3
-                String[] appIdLines = appIdLine.split("\t");
-                String appIdForGameWithQuotes = appIdLines[3]; // Is \t unwantedString \t \t wantedString
-                int appIdForGameLength = appIdForGameWithQuotes.length();
-                String appIdForGame = appIdForGameWithQuotes.substring(1, appIdForGameLength - 1); // Remove unwanted ""
-
-                if (appIdForGame.equals("228980")) { // Skip "Steamworks Common Redistributables" if found
-                    continue;
-                } else {
-                    //System.out.println("Id: " + appIdForGame);
-                    String gameLine = linesInFile.get(4); // Game name on line 5
-                    String[] gameLines = gameLine.split("\t");
-                    String nameForGameWithQuotes = gameLines[3]; // Is \t unwantedString \t \t wantedString
-                    int nameForGameLength = nameForGameWithQuotes.length();
-                    String nameForGame = nameForGameWithQuotes.substring(1, nameForGameLength - 1); // Remove unwanted ""
-                    //System.out.println("Game: " + nameForGame);
-
-                    // Add game name as key and game id as value to hashmap
-                    gamesAndIds.put(nameForGame, appIdForGame);
-                }
-
-
-            } catch (Exception e) {
-                System.out.println(".acf file was not found.");
-            }
-
-        }
-        return gamesAndIds;
     }
 
-    private static void startGame(Map<String, String> gamesAndIds) {
-        System.out.println("Games: " + gamesAndIds);
-
-        //Start the game written in .get() below
-        String game = gamesAndIds.get("Fallout: New Vegas");
-        try {
-            URI uri = new URI("steam://rungameid/" + game);
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().browse(uri);
-            }
-        } catch (Exception e) {
-            System.out.println("Could not start the game " + game + ". Please try with the Steam app.");
+    public static void userChooses(int userChoice) {
+        switch (userChoice) {
+            case 1:
+                System.out.println("Starting game...");
+                break;
+            case 2:
+                System.out.println("Adding game(s)...");
+                break;
+            case 0:
+                System.out.println("Exiting...");
+                break;
+            case -1:
+                System.out.println("TESTCASE...");
+                testXGamesMethod();
+                break;
+            default:
+                int newChoice = menuList();
+                userChooses(newChoice);
         }
     }
+
+    public static int menuList() {
+
+        System.out.println("Please enter the number for the option you choose:");
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt() == false) {
+            System.out.println("Please enter an integer from the list above.");
+            scanner.next();
+        }
+        int userChoice = scanner.nextInt();
+        System.out.println("You entered number " + userChoice + ("."));
+        return userChoice;
+
+    }
+
+    public static void lookForGamesFile() {
+        // Look for a file containing all installed games.
+        // If file is not available, create it through scripts below.
+    }
+
+    public static void testXGamesMethod() {
+        // Method for testing methods from xGames.java, where x is the game client supported.
+
+
+        // Test of OriginGames Class usage. WORKS!
+        /*File[] originFolder = new OriginGames().findOriginGameFiles();
+        Map<String, String[]> gamesAndIdsCollection = new OriginGames().collectOriginGames(originFolder, Main.gamesAndIdsInit);
+        new OriginGames().startOriginGame(gamesAndIdsCollection);*/
+
+        // Test of UplayGames Class usage. WORKS!
+        /*File[] uplayFolder = new UplayGames().findUplayGameFiles();
+        Map<String, String[]> gamesAndIdsCollection = new UplayGames().collectUplayGames(uplayFolder, Main.gamesAndIdsInit);
+        new UplayGames().startUplaygame(gamesAndIdsCollection);
+        */
+
+        // Test of SteamGamees Class usage. WORKS!
+        /*File[] steamFolder = new SteamGames().findSteamGameFiles();
+        Map<String, String[]> gamesAndIdsCollection = new SteamGames().collectSteamGames(steamFolder, Main.gamesAndIdsInit);
+        new SteamGames().startSteamGame(gamesAndIdsCollection);
+        */
+    }
+
 }
