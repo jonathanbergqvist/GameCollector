@@ -8,9 +8,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
+
+import static academy.learnprogramming.Main.originName;
 
 public class OriginGames {
 
@@ -24,6 +27,19 @@ public class OriginGames {
     }
 
     public static Map<String, String[]> collectOriginGames(File[] originFolderContent, Map gamesAndIdsCollection) {
+        boolean checkIfInFile = new GameServiceFileModifier().checkService(originName);
+        System.out.println("TF: " + checkIfInFile);
+        if (checkIfInFile == false) {
+            try {
+                FileWriter appendService = new FileWriter(new Main().fileName, true);
+                String serviceString = ">0< " + originName + "\n";
+                appendService.write(serviceString);
+                appendService.close();
+            } catch (Exception e) {
+                System.out.println(e);
+
+            }
+
 
         // Look at each game folder to find game id
         for (File gameFolder : originFolderContent) {
@@ -53,11 +69,35 @@ public class OriginGames {
                     // As single String
                     String gameIdCollectionAsString = String.join(", ", gameIdCollectionStringArray);
 
-                    String[] serviceAndId = {"Origin", gameIdCollectionAsString};
-                    gamesAndIdsCollection.put(gameName, serviceAndId);
+                    //String[] serviceAndId = {originName, gameIdCollectionAsString};
+                    //gamesAndIdsCollection.put(gameName, serviceAndId);
+
+                    try {
+                        FileWriter appendGameAndId = new FileWriter(new Main().fileName, true);
+                        String gameString = ">1< " + gameName+ "\n";
+                        String idString = ">2< " + gameIdCollectionAsString + "\n";
+                        appendGameAndId.write(gameString);
+                        appendGameAndId.write(idString);
+                        appendGameAndId.close();
+                    } catch (Exception e) {
+                        System.out.println(e);
+
+                    }
+
                 } catch (Exception e) {
                     System.out.println(e);
                 }
+
+            }
+        }
+
+            try {
+                FileWriter appendServiceEnd = new FileWriter(new Main().fileName, true);
+                String serviceString = ">3<\n";
+                appendServiceEnd.write(serviceString);
+                appendServiceEnd.close();
+            } catch (Exception e) {
+                System.out.println(e);
 
             }
 
@@ -65,7 +105,7 @@ public class OriginGames {
         return gamesAndIdsCollection;
     }
 
-    public static void startOriginGame(Map<String, String[]> gamesAndsIds) {
+    /*public static void startOriginGame(Map<String, String[]> gamesAndsIds) {
          // Start the game written in .get() below
         String[] gameArray = gamesAndsIds.get("Plants vs. Zombies");
         String service = gameArray[0];
@@ -80,6 +120,6 @@ public class OriginGames {
         }
 
 
-    }
+    }*/
 
 }

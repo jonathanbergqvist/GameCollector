@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
@@ -12,6 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Scanner;
+
+import static academy.learnprogramming.Main.uplayName;
 
 public class UplayGames {
 
@@ -23,6 +26,19 @@ public class UplayGames {
         // Configurations file containing the name of the .exe file for each available game.
         String uplayConfigFileLoc = uplayGamesFolder + "\\cache\\configuration\\configurations";
         File uplayConfigFile = new File(uplayConfigFileLoc);
+
+        boolean checkIfInFile = new GameServiceFileModifier().checkService(uplayName);
+        System.out.println("TF: " + checkIfInFile);
+        if (checkIfInFile == false) {
+            try {
+                FileWriter appendService = new FileWriter(new Main().fileName, true);
+                String serviceString = ">0< " + uplayName + "\n";
+                appendService.write(serviceString);
+                appendService.close();
+            } catch (Exception e) {
+                System.out.println(e);
+
+            }
 
         for (File file : uplayGamesFolderContent) {
             String gameName = file.getName();
@@ -51,8 +67,21 @@ public class UplayGames {
                                 .forEach((f)->{
                                 String correctFile = f.toString();
                                 if (correctFile.contains(exeName)) {
-                                    String[] serviceAndGame = {"Uplay", correctFile};
-                                    gamesAndIdsCollection.put(gameName, serviceAndGame);
+                                    //String[] serviceAndGame = {uplayName, correctFile};
+                                    //gamesAndIdsCollection.put(gameName, serviceAndGame);
+
+                                    try {
+                                        FileWriter appendGameAndId = new FileWriter(new Main().fileName, true);
+                                        String gameString = ">1< " + gameName + "\n";
+                                        String idString = ">2< " + correctFile + "\n";
+                                        appendGameAndId.write(gameString);
+                                        appendGameAndId.write(idString);
+                                        appendGameAndId.close();
+                                    } catch (Exception e) {
+                                        System.out.println(e);
+
+                                    }
+
                                 }
                                 });
                         break;
@@ -64,10 +93,22 @@ public class UplayGames {
             }
         }
 
+            try {
+                FileWriter appendServiceEnd = new FileWriter(new Main().fileName, true);
+                String serviceString = ">3<\n";
+                appendServiceEnd.write(serviceString);
+                appendServiceEnd.close();
+            } catch (Exception e) {
+                System.out.println(e);
+
+            }
+
+        }
+
         return gamesAndIdsCollection;
     }
 
-    public static void startUplaygame (Map<String, String[]> gamesAndIds) {
+    /*public static void startUplaygame (Map<String, String[]> gamesAndIds) {
         System.out.println("Games: " + gamesAndIds);
 
         String gameKey = "Rayman Origins"; // SHALL BE USER INPUT
@@ -91,5 +132,5 @@ public class UplayGames {
 
 
 
-    }
+    }*/
 }

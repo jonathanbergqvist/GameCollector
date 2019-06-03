@@ -13,8 +13,10 @@ import java.util.Scanner;
 // * KLAR:    Se till att mappkontrollen börjar om med nytt försök när man skriver fel (kan inte skriva över variabel).
 // *
 // * Dokumentera den nuvarande koden med kommentarer och rensa undan oanvänd kod.
-// * Samla alla spel i den gemensamma listan gamesAndIdsInit.
-// * Spara den gemensamma listan som en fil, t ex XML eller JSON
+// *
+// * EJ. Samla alla spel i den gemensamma listan gamesAndIdsInit.
+// * Spara den gemensamma listan med spel som en fil, t ex XML eller JSON
+// * Kunna lägga till fler spel från en klient som redan har spel, t ex från en annan mapp.
 // * Låt programmet kolla om ovan nämnda fil finns vid start av programmet
 // och gå in i starta spel eller lägga in spel som standard beroende på om filen finns.
 // * Se till att kontroller av input är mer generella till antalet möjligheter i respektive meny.
@@ -27,10 +29,17 @@ public class Main {
     public static final String steamName = "Steam";
     public static final String originName = "Origin";
     public static final String uplayName = "Uplay";
+    public static String fileName = "gameServicesAndGames.txt";
 
     public static void main(String[] args) {
         // Get to the availableMenuChoices function.
         availableMenuChoices();
+        //new GameServiceFileModifier().createFile();
+        //new GameServiceFileModifier().writeToFile();
+        //boolean res = new GameServiceFileModifier().checkService(steamName);
+        //System.out.println(res);
+        //new GameServiceFileModifier().appendFile();
+        //new GameServiceFileModifier().checkService(steamName);
     }
 
     public static void availableMenuChoices() {
@@ -113,7 +122,7 @@ public class Main {
                 Map<String, String[]> gamesAndIdsCollectionFromSteam = new SteamGames().collectSteamGames(steamFolderContent, gamesAndIdsInit);
                 //REMOVE AFTER OWN START CASES:
                 // Start the Steam game
-                new SteamGames().startSteamGame(gamesAndIdsCollectionFromSteam);
+                //new SteamGames().startSteamGame(gamesAndIdsCollectionFromSteam);
                 break;
             case 2:
                 System.out.println(originName);
@@ -124,10 +133,10 @@ public class Main {
                 File[] originFolderContent = new OriginGames().findOriginGameFiles(originFolder);
                 // Collect the installed Origin games.
                 Map<String, String[]> gamesAndIdsCollectionFromOrigin = new OriginGames().collectOriginGames(originFolderContent, gamesAndIdsInit);
-                System.out.println(originName + " games added.");
+                //System.out.println(originName + " games added.");
                 //REMOVE AFTER OWN START CASES:
                 // Start the Origin game
-                new OriginGames().startOriginGame(gamesAndIdsCollectionFromOrigin);
+                //new OriginGames().startOriginGame(gamesAndIdsCollectionFromOrigin);
                 break;
             case 3:
                 System.out.println(uplayName);
@@ -139,7 +148,7 @@ public class Main {
                 System.out.println(uplayName + " games added.");
                 //REMOVE AFTER OWN START CASES:
                 // Start the Uplay game
-                new UplayGames().startUplaygame(gamesAndIdsCollectionFromUplay);
+                //new UplayGames().startUplaygame(gamesAndIdsCollectionFromUplay);
                 break;
             case 0:
                 System.out.println("Exiting");
