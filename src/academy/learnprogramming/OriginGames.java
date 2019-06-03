@@ -13,10 +13,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class OriginGames {
-    public static File[] findOriginGameFiles() {
 
-        // Folder containing folders with each installed game
-        String originRootPath = "C:\\Program Files (x86)\\Origin Games";
+    public static File[] findOriginGameFiles(String originRootPath) {
 
         // Same the game folders.
         File originRootFolder = new File(originRootPath);
@@ -40,7 +38,6 @@ public class OriginGames {
                     DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
                     Document document = documentBuilder.parse(installerGameFile);
                     NodeList contentIds = document.getElementsByTagName("contentID");
-                    //System.out.println(contentIds.toString());
 
                     // Get each contentId for game as String
                     int amountContentIds = contentIds.getLength();
@@ -50,21 +47,14 @@ public class OriginGames {
                         Node nodeId = contentIds.item(i);
                         String stringId = nodeId.getTextContent();
                         gameIdCollectionArrayList.add(stringId);
-                        //System.out.println("Id: " + stringId);
-
                     }
-                    //System.out.println(gameIdCollectionArrayList);
                     // As String[]
                     String[] gameIdCollectionStringArray = gameIdCollectionArrayList.toArray(new String[0]);
                     // As single String
                     String gameIdCollectionAsString = String.join(", ", gameIdCollectionStringArray);
-                    //System.out.println(gameIdCollectionAsString);
 
                     String[] serviceAndId = {"Origin", gameIdCollectionAsString};
                     gamesAndIdsCollection.put(gameName, serviceAndId);
-
-
-
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -76,13 +66,10 @@ public class OriginGames {
     }
 
     public static void startOriginGame(Map<String, String[]> gamesAndsIds) {
-        //System.out.println("Games: " + gamesAndsIds);
-
-        // Start the game written in .get() below
+         // Start the game written in .get() below
         String[] gameArray = gamesAndsIds.get("Plants vs. Zombies");
         String service = gameArray[0];
         String game = gameArray[1];
-        //System.out.println(service + " " + game);
         try {
             URI uri = new URI("origin://launchgame/" + game);
             if (Desktop.isDesktopSupported()) {
