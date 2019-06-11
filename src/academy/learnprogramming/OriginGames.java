@@ -8,9 +8,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
+
+import static academy.learnprogramming.Main.originName;
 
 public class OriginGames {
 
@@ -23,7 +26,10 @@ public class OriginGames {
         return originFolderContent;
     }
 
-    public static Map<String, String[]> collectOriginGames(File[] originFolderContent, Map gamesAndIdsCollection) {
+    public static void collectOriginGames(File[] originFolderContent, Map gamesAndIdsCollection) {
+        // Check if the game service is in file, if it is then skip adding games.
+        ArrayList<String> gamesInFile = new GameServiceFileModifier().checkService(originName);
+        //System.out.println("TF: " + gamesInFile);
 
         // Look at each game folder to find game id
         for (File gameFolder : originFolderContent) {
@@ -53,25 +59,32 @@ public class OriginGames {
                     // As single String
                     String gameIdCollectionAsString = String.join(", ", gameIdCollectionStringArray);
 
-                    String[] serviceAndId = {"Origin", gameIdCollectionAsString};
-                    gamesAndIdsCollection.put(gameName, serviceAndId);
+                    // Check if game in ArrayList
+                    if (!(gamesInFile.contains(gameName))) {
+
+                        try {
+                            FileWriter appendGameAndId = new FileWriter(new Main().fileName, true);
+                            String originLine = gameName + "," + originName + "," + gameIdCollectionAsString + "\n";
+                            appendGameAndId.write(originLine);
+                            appendGameAndId.close();
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+                    }
+
                 } catch (Exception e) {
                     System.out.println(e);
                 }
 
             }
-
         }
-        return gamesAndIdsCollection;
     }
 
-    public static void startOriginGame(Map<String, String[]> gamesAndsIds) {
-         // Start the game written in .get() below
-        String[] gameArray = gamesAndsIds.get("Plants vs. Zombies");
-        String service = gameArray[0];
-        String game = gameArray[1];
+    public static void startOriginGame(String gameName, String gameId) {
+         // Start the Origin game through URI.
         try {
-            URI uri = new URI("origin://launchgame/" + game);
+            System.out.println("Starting " + gameName);
+            URI uri = new URI("origin://launchgame/" + gameId);
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(uri);
             }
