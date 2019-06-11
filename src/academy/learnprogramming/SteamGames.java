@@ -24,20 +24,11 @@ public class SteamGames {
         return steamFolderContent;
     }
 
-    public static Map<String, String[]> collectSteamGames(File[] steamFolderContent, Map gamesAndIdsCollection) {
-        boolean checkIfInFile = new GameServiceFileModifier().checkService(steamName);
-        System.out.println("TF: " + checkIfInFile);
-        if (checkIfInFile == false) {
-            try {
-                FileWriter appendService = new FileWriter(new Main().fileName, true);
-                String serviceString = ">0< " + steamName + "\n";
-                appendService.write(serviceString);
-                appendService.close();
-            } catch (Exception e) {
-                System.out.println(e);
+    public static void collectSteamGames(File[] steamFolderContent, Map gamesAndIdsCollection) {
 
-            }
-
+        // Check if the game service is in file, if it is then skip adding games.
+        ArrayList<String> gamesInFile = new GameServiceFileModifier().checkService(steamName);
+        //System.out.println("TF: " + gamesInFile);
 
             // Find the app id and game name in each file
             for (File file : steamFolderContent) {
@@ -64,74 +55,40 @@ public class SteamGames {
                         int nameForGameLength = nameForGameWithQuotes.length();
                         String nameForGame = nameForGameWithQuotes.substring(1, nameForGameLength - 1); // Remove unwanted ""
 
-                        // Add game name as key and game id as value to hashmap
-                        //String[] serviceAndId = {new Main().steamName, appIdForGame};
-                        //gamesAndIdsCollection.put(nameForGame, serviceAndId);
+                        // Check if game in ArrayList
+                        if (!(gamesInFile.contains(nameForGame))) {
 
-                        try {
-                            FileWriter appendGameAndId = new FileWriter(new Main().fileName, true);
-                            String gameString = ">1< " + nameForGame + "\n";
-                            String idString = ">2< " + appIdForGame + "\n";
-                            appendGameAndId.write(gameString);
-                            appendGameAndId.write(idString);
-                            appendGameAndId.close();
-                        } catch (Exception e) {
-                            System.out.println(e);
-
+                            try {
+                                FileWriter appendGameAndId = new FileWriter(new Main().fileName, true);
+                                String steamLine = nameForGame + "," + steamName + "," + appIdForGame + "\n";
+                                appendGameAndId.write(steamLine);
+                                appendGameAndId.close();
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            }
                         }
 
-
-                        /*try {
-                            FileWriter appendFile = new FileWriter(new Main().fileName, true);
-                            String serviceString = ">0< " + steamName + "\n";
-                            appendFile.write(serviceString);
-                            appendFile.close();
-                        } catch (Exception e) {
-                            System.out.println(e);
-
-                        }*/
-
-                        /*boolean checkIfInFile = new GameServiceFileModifier().checkService(steamName);
-                        if (!(checkIfInFile)) {
-
-                        }*/
                     }
                     scannerFile.close();
-                } catch (Exception e) {
+                } catch(Exception e){
                     System.out.println(e);
                 }
             }
-
-            try {
-                FileWriter appendServiceEnd = new FileWriter(new Main().fileName, true);
-                String serviceString = ">3<\n";
-                appendServiceEnd.write(serviceString);
-                appendServiceEnd.close();
-            } catch (Exception e) {
-                System.out.println(e);
-
-            }
-
-        }
-        return gamesAndIdsCollection;
     }
 
 
-    /*public static void startSteamGame(Map<String, String[]> gamesAndIds) {
-        //System.out.println("Games: " + gamesAndIds);
+    public static void startSteamGame(String gameName, String gameId) {
 
-        // Start the game written in .get() below
-        String[] gameArray = gamesAndIds.get("Fallout: New Vegas");
-        String service = gameArray[0];
-        String game = gameArray[1];
+        // Start the Steam game through URI.
         try {
-            URI uri = new URI("steam://rungameid/" + game);
+            System.out.println("Starting " + gameName);
+            URI uri = new URI("steam://rungameid/" + gameId);
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(uri);
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-    }*/
+    }
 }
 

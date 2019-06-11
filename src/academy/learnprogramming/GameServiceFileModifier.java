@@ -2,88 +2,40 @@ package academy.learnprogramming;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class GameServiceFileModifier {
-/*    //public static String fileName = "gameServicesAndGames.txt";
-    public static void createFile() {
-        File gamesAndServicesFile = new File(new Main().fileName);
+
+    public static ArrayList<String> checkService(String service) {
+        //System.out.println("Reading file of saved games");
+        ArrayList<String> gameNamesInFileForService = new ArrayList<>();
         try {
-            if (gamesAndServicesFile.createNewFile()) {
-                System.out.println("File created: " + gamesAndServicesFile.getName() + " in " + gamesAndServicesFile.getAbsolutePath() + ".");
-            } else {
-                System.out.println("File " + gamesAndServicesFile.getName() + " already exists in " + gamesAndServicesFile.getAbsolutePath() + ".");
-            }
-            } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public static void writeToFile() {
-        System.out.println("Writing to file.");
-        try {
-            FileWriter fileWriter = new FileWriter(new Main().fileName);
-            fileWriter.write(">0< Testrow 0\n");
-            fileWriter.write(">1< Testrow 1\n");
-            fileWriter.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-    }
-
-    public static void appendFile() {
-        System.out.println("Appending file");
-        try {
-            FileWriter fileAppender = new FileWriter(new Main().fileName, true);
-            fileAppender.write(">2< Row 2");
-            fileAppender.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-
-
-
-    }
-*/
-    public static boolean checkService(String service) {
-        System.out.println("Reading file");
-        try {
-            String serviceString = ">0< " + service;
+            // Read file
             File fileReader = new File(new Main().fileName);
             Scanner readLineInFile = new Scanner(fileReader);
             while (readLineInFile.hasNextLine()) {
-                String lineContent = readLineInFile.nextLine();
-                //System.out.println(lineContent);
-                // <gameName, [gameService, gameFilePath]>
-                // service, game, gamePath
-                //String index = lineContent.substring(0,3);
-                if (lineContent.equals(serviceString)) {
-                    return true;
+                String lineContent = readLineInFile.nextLine(); // Line in file
+
+                // Split string into game, service and id
+                String[] lineContentSplit = lineContent.split(",");
+                String game = lineContentSplit[0]; // Game
+
+                // Add games in file for service to ArrayList
+                if (lineContentSplit[1].equals(service)) {
+                    gameNamesInFileForService.add(game);
+                    //System.out.println(gameNamesInFileForService);
                 }
-
-                /*switch (index) {
-                    case ">0<":
-                        System.out.println("0");
-                        if (lineContent.substring(4).equals(service)) {
-                            return true;
-                        }
-                        break;
-                }*/
-
-
-                /*if (lineContent.substring(0,3).contains("Tes")) {
-                    System.out.println("WORKS!");
-                }*/
-
             }
             readLineInFile.close();
         } catch (Exception e) {
             System.out.println(e);
         }
-        return false;
+
+        //System.out.println("Done" + gameNamesInFileForService);
+        return gameNamesInFileForService;
     }
 
 }
