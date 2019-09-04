@@ -1,6 +1,9 @@
 package academy.learnprogramming;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -15,7 +18,14 @@ public class Main {
     public static final String uplayName = "Uplay";
     public static String fileName = "gameServicesAndGames.txt";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        // Check that the file to store games in exists, if not create the file
+        File fileCheck = new File(fileName);
+        final Path path = fileCheck.toPath();
+        if (Files.notExists(path)) {
+            fileCheck.createNewFile();
+        }
+
         // Get to the availableMenuChoices function.
         availableMenuChoices();
         //new GameServiceFileModifier().createFile();
