@@ -17,9 +17,9 @@ import java.util.Scanner;
 
 import static academy.learnprogramming.Main.uplayName;
 
-public class UplayGames {
+class UplayGames {
 
-    public static void findAndCollectUplayGames(String uplayGamesFolder, Map gamesAndIdsCollection) {
+    static void findAndCollectUplayGames(String uplayGamesFolder) {
         String uplayRootGameFolder = uplayGamesFolder + "\\games";
         File uplayGamesFolderWithGames = new File(uplayRootGameFolder);
         File[] uplayGamesFolderContent = uplayGamesFolderWithGames.listFiles();
@@ -88,7 +88,7 @@ public class UplayGames {
 
     }
 
-    public static void startUplaygame(String gameName, String gameId) {
+    static void startUplaygame(String gameName, String gameId) {
 
         // Get the parent folder for the .exe file needed to start game.
         File file = new File(gameId);

@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 import static academy.learnprogramming.Main.*;
 
-public class StartGame {
+class StartGame {
 
-    public static void listGames() {
+    static void listGames() {
         ArrayList<String> gameList = new ArrayList<>();
         try {
             // Read file
@@ -44,7 +44,7 @@ public class StartGame {
     }
 
 
-    public static void getGameChoice() {
+    static void getGameChoice() {
         System.out.println("\nPlease write the name of the game you want to start.");
         System.out.println("Write 0 if you want to back.");
         System.out.println("The available games are listed above.");
@@ -92,6 +92,9 @@ public class StartGame {
                             break;
                         case uplayName:
                             new UplayGames().startUplaygame(gameName, gameId);
+                            break;
+                        case eglName:
+                            new EGLGames().startEGLgame(gameName, gameId);
                             break;
                         default:
                             System.out.println("Something went wrong.");

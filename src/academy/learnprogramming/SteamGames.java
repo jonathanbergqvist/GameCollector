@@ -11,9 +11,9 @@ import java.util.Scanner;
 
 import static academy.learnprogramming.Main.steamName;
 
-public class SteamGames {
+class SteamGames {
 
-    public static File[] findSteamGameFiles(String steamRootFolder) {
+    static File[] findSteamGameFiles(String steamRootFolder) {
         // Find the .acf files with app id from the folder specified above
         File steamRootFile = new File(steamRootFolder);
         File[] steamFolderContent = steamRootFile.listFiles(new FilenameFilter() {
@@ -24,7 +24,7 @@ public class SteamGames {
         return steamFolderContent;
     }
 
-    public static void collectSteamGames(File[] steamFolderContent, Map gamesAndIdsCollection) {
+    static void collectSteamGames(File[] steamFolderContent) {
 
         // Check if the game service is in file, if it is then skip adding games.
         ArrayList<String> gamesInFile = new GameServiceFileModifier().checkService(steamName);
@@ -77,7 +77,7 @@ public class SteamGames {
     }
 
 
-    public static void startSteamGame(String gameName, String gameId) {
+    static void startSteamGame(String gameName, String gameId) {
 
         // Start the Steam game through URI.
         try {

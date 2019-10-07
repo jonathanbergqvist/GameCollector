@@ -1,15 +1,12 @@
 package academy.learnprogramming;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
-public class GameServiceFileModifier {
+class GameServiceFileModifier {
 
-    public static ArrayList<String> checkService(String service) {
+    static ArrayList<String> checkService(String service) {
         //System.out.println("Reading file of saved games");
         ArrayList<String> gameNamesInFileForService = new ArrayList<>();
         try {

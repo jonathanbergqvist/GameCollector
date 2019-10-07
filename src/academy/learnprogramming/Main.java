@@ -8,15 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Main {
+class Main {
 
-    // HashMap to store games (keys) and ids (values) with
-    public static Map<String, String[]> gamesAndIdsInit = new HashMap<>();
     // Define game services
-    public static final String steamName = "Steam";
-    public static final String originName = "Origin";
-    public static final String uplayName = "Uplay";
-    public static String fileName = "gameServicesAndGames.txt";
+    static final String steamName = "Steam";
+    static final String originName = "Origin";
+    static final String uplayName = "Uplay";
+    static  final String eglName = "Epic Games Launcher";
+    static String fileName = "gameServicesAndGames.txt";
 
     public static void main(String[] args) throws IOException {
         // Check that the file to store games in exists, if not create the file
@@ -28,15 +27,9 @@ public class Main {
 
         // Get to the availableMenuChoices function.
         availableMenuChoices();
-        //new GameServiceFileModifier().createFile();
-        //new GameServiceFileModifier().writeToFile();
-        //boolean res = new GameServiceFileModifier().checkService(steamName);
-        //System.out.println(res);
-        //new GameServiceFileModifier().appendFile();
-        //new GameServiceFileModifier().checkService(steamName);
     }
 
-    public static void availableMenuChoices() {
+    static void availableMenuChoices() {
         // Menu to list available choices.
         System.out.println("1. Start game");
         System.out.println("2. Add games");
@@ -47,7 +40,7 @@ public class Main {
         startMenuChoice(choice);
     }
 
-    public static int selectAllowedMenuChoice() {
+    private static int selectAllowedMenuChoice() {
         // Get user input and make sure that the input is an allowed integer.
         Scanner scanner = new Scanner(System.in);
         int userChoice;
@@ -65,7 +58,7 @@ public class Main {
 
     }
 
-    public static void startMenuChoice(int userChoice) {
+    private static void startMenuChoice(int userChoice) {
         switch (userChoice) {
             case 1:
                 sgStartGame();
@@ -84,12 +77,13 @@ public class Main {
     }
 
     //// Add games ////
-    public static void agSelectGameService() {
+    private static void agSelectGameService() {
         // Choose game service provider.
         System.out.println("You can add games from these services:");
         System.out.println("1. " + steamName);
         System.out.println("2. " + originName);
         System.out.println("3. " + uplayName);
+        System.out.println("4. " + eglName);
         System.out.println("0. Back");
         Scanner getServiceProvider = new Scanner(System.in);
         int serviceChoice;
@@ -100,7 +94,7 @@ public class Main {
                 getServiceProvider.next();
             }
             serviceChoice = getServiceProvider.nextInt();
-        } while ((serviceChoice < 0) || (serviceChoice > 3)); // Depends on availableMenuChoices in agSelectGameService().
+        } while ((serviceChoice < 0) || (serviceChoice > 4)); // Depends on availableMenuChoices in agSelectGameService().
 
         String initString = "init";
         switch(serviceChoice) {
@@ -113,7 +107,7 @@ public class Main {
                 // Find installed Steam games in the folder provided.
                 File[] steamFolderContent = new SteamGames().findSteamGameFiles(steamFolder);
                 // Collect the installed Steam games.
-                new SteamGames().collectSteamGames(steamFolderContent, gamesAndIdsInit);
+                new SteamGames().collectSteamGames(steamFolderContent);
                 System.out.println("List of games updated\n");
                 availableMenuChoices();
                 break;
@@ -125,7 +119,7 @@ public class Main {
                 // Find installed Origin games in the folder provided.
                 File[] originFolderContent = new OriginGames().findOriginGameFiles(originFolder);
                 // Collect the installed Origin games.
-                new OriginGames().collectOriginGames(originFolderContent, gamesAndIdsInit);
+                new OriginGames().collectOriginGames(originFolderContent);
                 System.out.println("List of games updated\n");
                 availableMenuChoices();
                 break;
@@ -135,10 +129,19 @@ public class Main {
                 // Get the correct Uplay folder path.
                 String uplayFolder = agWriteGameServiceFolder(uplayName, initString);
                 // Find installed Uplay games in the folder provided and collect them.
-                new UplayGames().findAndCollectUplayGames(uplayFolder, gamesAndIdsInit);
+                new UplayGames().findAndCollectUplayGames(uplayFolder);
                 System.out.println("List of games updated\n");
                 availableMenuChoices();
                 break;
+            case 4:
+                System.out.println(eglName);
+                System.out.println("The fold path is to \"Epic Games Launcher\", which defaults to \"C:\\Program Files\\Epic Games\"");
+                String eglFolder = agWriteGameServiceFolder(eglName, initString);
+                new EGLGames().findAndCollectEGLGames(eglFolder);
+                System.out.println("List of games updated\n");
+                availableMenuChoices();
+                break;
+
             case 0:
                 System.out.println("Backing");
                 availableMenuChoices();
@@ -154,7 +157,7 @@ public class Main {
 
     }
 
-    public static String agWriteGameServiceFolder(String gameClient, String initString) {
+    private static String agWriteGameServiceFolder(String gameClient, String initString) {
         // Get the user folder input and check that it is correct for the service in question
         Scanner getRootFolder = new Scanner(System.in);
         String rootFolder = "";
@@ -173,7 +176,7 @@ public class Main {
         return rootFolder;
     }
 
-    public static boolean agCheckGameServiceFolderValidity(String folderPath, String gameClient) {
+    private static boolean agCheckGameServiceFolderValidity(String folderPath, String gameClient) {
         // Create File variable of the written folder path.
         File rootFolderCheck = new File(folderPath);
         // Check that the folder path exists, if not ask for a new input.
@@ -197,6 +200,9 @@ public class Main {
             } else if (gameClient.equals(uplayName)) {
                 System.out.println(folderEnd + " is the correct folder path");
                 return true;
+            } else if (gameClient.equals(eglName)) {
+                System.out.println(folderEnd + " is the correct folder path");
+                return true;
             } else {
                 System.out.println("Incorrect service written, please try again.");
                 return false;
@@ -206,7 +212,7 @@ public class Main {
     ///////////////////
 
     //// Start game ////
-    public static void sgStartGame() {
+    private static void sgStartGame() {
         StartGame.listGames();
         StartGame.getGameChoice();
 

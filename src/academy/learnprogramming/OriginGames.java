@@ -15,9 +15,9 @@ import java.util.Map;
 
 import static academy.learnprogramming.Main.originName;
 
-public class OriginGames {
+class OriginGames {
 
-    public static File[] findOriginGameFiles(String originRootPath) {
+    static File[] findOriginGameFiles(String originRootPath) {
 
         // Same the game folders.
         File originRootFolder = new File(originRootPath);
@@ -26,7 +26,7 @@ public class OriginGames {
         return originFolderContent;
     }
 
-    public static void collectOriginGames(File[] originFolderContent, Map gamesAndIdsCollection) {
+    static void collectOriginGames(File[] originFolderContent) {
         // Check if the game service is in file, if it is then skip adding games.
         ArrayList<String> gamesInFile = new GameServiceFileModifier().checkService(originName);
         //System.out.println("TF: " + gamesInFile);
@@ -80,7 +80,7 @@ public class OriginGames {
         }
     }
 
-    public static void startOriginGame(String gameName, String gameId) {
+    static void startOriginGame(String gameName, String gameId) {
          // Start the Origin game through URI.
         try {
             System.out.println("Starting " + gameName);
