@@ -212,7 +212,7 @@ class Main {
     ///////////////////
 
     //// Start game ////
-    private static void sgStartGame() {
+    static void sgStartGame() {
         StartGame.listGames();
         StartGame.getGameChoice();
 
