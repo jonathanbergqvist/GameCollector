@@ -214,8 +214,13 @@ class Main {
     //// Start game ////
     static void sgStartGame() {
         StartGame.listGames();
-        StartGame.getGameChoice();
+        //tartGame.getGameChoice();
 
+    }
+
+
+    static void sgListGamesGUI() {
+        StartGame.listGames();
     }
 
 

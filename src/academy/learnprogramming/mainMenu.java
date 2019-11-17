@@ -1,27 +1,29 @@
 package academy.learnprogramming;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.event.*;
 import java.io.IOException;
-import java.util.Set;
+import java.util.ArrayList;
 
 public class mainMenu {
     private JButton startGameButton;
     private JButton addGamesButton;
     private JPanel menuPanel;
-    private JTextArea gameCollectorTextArea;
+    private JList jListGameList;
 
     public mainMenu() {
+
+        // Get the games to the list
+        jListGameList.setListData(StartGame.listGames());
+
         // When pressing button for starting game, then display the message
         startGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Hello world!");
-                Main.sgStartGame();
+                //Main.sgListGamesGUI();
             }
         });
 
@@ -38,6 +40,18 @@ public class mainMenu {
                 super.componentResized(e);
             }
         });
+
+        jListGameList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) {
+                    JOptionPane.showMessageDialog(null, "Hello world!");
+                    String game = (String) jListGameList.getSelectedValue();
+                    StartGame.getGameChoice(game);
+                }
+            }
+        });
     }
 
     public static void main(String[] args) throws IOException {
@@ -49,5 +63,7 @@ public class mainMenu {
         menuFrame.setVisible(true); // Set visibility of the window
 
     }
+
+
 }
 

@@ -9,7 +9,7 @@ import static academy.learnprogramming.Main.*;
 
 class StartGame {
 
-    static void listGames() {
+    static Object[] listGames() {
         ArrayList<String> gameList = new ArrayList<>();
         try {
             // Read file
@@ -34,18 +34,25 @@ class StartGame {
 
         // Sort ArrayList
         Collections.sort(gameList);
+        //String[] gameListArray = new String[gameList.size()];
+        //JList<String> jGameList = new JList<>(gameList.toArray(gameListArray));
 
         // Print games
-        System.out.println("Games available:");
+        /*System.out.println("Games available:");
         for (String game : gameList) {
             System.out.println(game);
-        }
+        }*/
+
+        // Create array as an Object that is used by GUI
+        Object[] gameListObject = gameList.toArray();
+
+        return gameListObject;
 
     }
 
 
-    static void getGameChoice() {
-        System.out.println("\nPlease write the name of the game you want to start.");
+    static void getGameChoice(String gameChoice) {
+        /*System.out.println("\nPlease write the name of the game you want to start.");
         System.out.println("Write 0 if you want to back.");
         System.out.println("The available games are listed above.");
 
@@ -59,7 +66,7 @@ class StartGame {
         if (gameChoice.equals("0")) {
             System.out.println("Backing");
             Main.availableMenuChoices();
-        }
+        }*/
 
         try {
             // Read file
@@ -114,7 +121,7 @@ class StartGame {
             // Make sure the input is allowed.
             if (gameFileStatus == false) {
                 System.out.println("The input doesn't match a game name from the list. Please try again.");
-                getGameChoice();
+                //getGameChoice();
             }
 
         } catch (Exception e) {
