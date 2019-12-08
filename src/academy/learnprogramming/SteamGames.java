@@ -28,10 +28,10 @@ class SteamGames {
 
         // Check if the game service is in file, if it is then skip adding games.
         ArrayList<String> gamesInFile = new GameServiceFileModifier().checkService(steamName);
-        //System.out.println("TF: " + gamesInFile);
 
             // Find the app id and game name in each file
             for (File file : steamFolderContent) {
+
                 // Start to scan file and add needed line to array
                 try {
                     Scanner scannerFile = new Scanner(file);
@@ -57,7 +57,7 @@ class SteamGames {
 
                         // Check if game in ArrayList
                         if (!(gamesInFile.contains(nameForGame))) {
-
+                            //System.out.println("ADD GAME");
                             try {
                                 FileWriter appendGameAndId = new FileWriter(new Main().fileName, true);
                                 String steamLine = nameForGame + "," + steamName + "," + appIdForGame + "\n";

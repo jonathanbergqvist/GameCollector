@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 class Main {
@@ -14,7 +13,7 @@ class Main {
     static final String steamName = "Steam";
     static final String originName = "Origin";
     static final String uplayName = "Uplay";
-    static  final String eglName = "Epic Games Launcher";
+    static final String eglName = "Epic Games Launcher";
     static String fileName = "gameServicesAndGames.txt";
 
     public static void main(String[] args) throws IOException {
@@ -75,6 +74,79 @@ class Main {
                 startMenuChoice(newChoice);
         }
     }
+
+    // List game services in GUI as Object
+    static Object[] guiViewGameServices() {
+        ArrayList<String> gamesServicesArrayList = new ArrayList<>();
+        gamesServicesArrayList.add(steamName);
+        gamesServicesArrayList.add(originName);
+        gamesServicesArrayList.add(uplayName);
+        gamesServicesArrayList.add(eglName);
+
+        Object[] gamesServicesObject = gamesServicesArrayList.toArray();
+
+        return gamesServicesObject;
+    }
+
+
+    static String guiSelectedGameService(String gameServiceSelected) {
+
+        String gameServiceDefaultPath;
+        switch(gameServiceSelected) {
+            case steamName:
+                // Choose Steam
+                System.out.println(steamName);
+                gameServiceDefaultPath = "\"C:\\Program Files (x86)\\Steam\\steamapps\"";
+                System.out.println("The fold path is to \"steamapps\", which defaults to " + gameServiceDefaultPath);
+
+                break;
+            case originName:
+                System.out.println(originName);
+                gameServiceDefaultPath = "\"C:\\Program Files (x86)\\Origin Games\"";
+                System.out.println("The fold path is to \"Origin Games\", which defaults to " + gameServiceDefaultPath);
+                break;
+            case uplayName:
+                System.out.println(uplayName);
+                gameServiceDefaultPath = "\"C:\\Program Files (x86)\\Ubisoft\\Ubisoft Game Launcher\"";
+                System.out.println("The fold path is to \"Ubisoft Game Launcher\", which defaults to " + gameServiceDefaultPath);
+                break;
+            case eglName:
+                System.out.println(eglName);
+                gameServiceDefaultPath = "\"C:\\Program Files\\Epic Games\"";
+                System.out.println("The fold path is to \"Epic Games Launcher\", which defaults to " + gameServiceDefaultPath);
+                break;
+            default:
+                gameServiceDefaultPath = null;
+                break;
+        }
+
+        return gameServiceDefaultPath;
+    }
+
+    static void guiFindGamesForService(String gameServiceSelected, String gameServiceFolder) {
+
+        //File[] foundGames;
+        switch(gameServiceSelected) {
+            case steamName:
+                File[] foundSteamGames = new SteamGames().findSteamGameFiles(gameServiceFolder);
+                new SteamGames().collectSteamGames(foundSteamGames);
+                break;
+            case originName:
+                File[] foundOriginGames = new OriginGames().findOriginGameFiles(gameServiceFolder);
+                new OriginGames().collectOriginGames(foundOriginGames);
+                break;
+            case uplayName:
+                new UplayGames().findAndCollectUplayGames(gameServiceFolder);
+                break;
+            case eglName:
+                new EGLGames().findAndCollectEGLGames(gameServiceFolder);
+                break;
+            default:
+                break;
+        }
+    }
+
+
 
     //// Add games ////
     private static void agSelectGameService() {
