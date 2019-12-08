@@ -85,10 +85,10 @@ public class mainMenu extends Component {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (e.getClickCount() == 2) {
-                    JOptionPane.showMessageDialog(null, "Start game");
+                    //JOptionPane.showMessageDialog(null, "Start game");
                     // Start game
-                    //String game = (String) jListGameList.getSelectedValue();
-                    //StartGame.getGameChoice(game);
+                    String game = (String) jListGameList.getSelectedValue();
+                    StartGame.getGameChoice(game);
                 }
             }
         });
